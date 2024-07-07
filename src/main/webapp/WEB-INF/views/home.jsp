@@ -108,6 +108,3 @@
 
 </body>
 </html>
-<script>
-
-</script>
