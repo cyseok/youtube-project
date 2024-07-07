@@ -1,0 +1,188 @@
+body {
+    background-color: #f8f9fa;
+}
+.search-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.logo img {
+    width: 200px;
+}
+.comment-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+.creator-comment {
+    border: 2px solid #065fd4;
+}
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.heart-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    filter: opacity(0.6) drop-shadow(0 0 0 #228b22);
+}
+.channel-id {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.comment-date {
+    color: #606060;
+    font-size: 0.9em;
+}
+.comment-content {
+    margin-bottom: 10px;
+}
+.comment-footer {
+    display: flex;
+    align-items: center;
+}
+.reply-count {
+    color: #606060;
+    font-size: 0.9em;
+}
+.like-count {
+    margin-right: 10px;
+    color: #606060;
+    font-size: 0.9em;
+}
+#commentList {
+    margin-bottom: 40px;
+}
+.comment-list {
+    max-width: 80%;
+    margin: 0 auto;
+}
+.messages-color {
+    /* background-color: rgb(230, 247, 255); */
+    margin-top: 30px;
+    background-color: rgb(242, 242, 242);
+}
+.messages {
+    margin-right: 20px;
+    margin-left: 20px;
+    padding: 1.5vh 0;
+}
+.info {
+    text-align: right;
+}
+/* 영상 정보 */
+.video-container {
+    display: flex;
+    max-width: 80%;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+    flex-direction: row;
+}
+
+@media screen and (max-width: 991px) {
+    .video-container {
+        flex-direction: column;
+    }
+
+    #thumbnailImg {
+        width: 100%;
+        height: auto;
+    }
+
+    .video-details {
+        width: 100%;
+    }
+}
+
+.video-container img {
+    max-width: 100%;
+    height: auto;
+}
+#thumbnailImg{
+    height: auto;
+    cursor: pointer;
+}
+.video-details {
+    flex: 1;
+    padding: 20px;
+}
+.video-details h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 20px;
+}
+.video-details p {
+    margin: 10px 0;
+    color: #666;
+}
+.video-details a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.video-details a:hover {
+    text-decoration: underline;
+}
+.like-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+#likeCount {
+    display: flex;
+    align-items: center;
+}
+#videoTitle {
+    font-size: 23px;
+    transition: text-decoration 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 3vw;
+}
+#videoTitle:hover {
+    text-decoration: underline;
+}
+#viewCount, #publishedAt {
+    margin-bottom: 1.5vw;
+}
+#channelTitle {
+    margin-bottom: 1.5vw;
+    text-decoration: underline;
+}
+#comment-number, #comment-count {
+    font-weight: bold;
+}
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
