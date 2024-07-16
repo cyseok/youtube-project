@@ -14,6 +14,7 @@
     <jsp:include page="/WEB-INF/include/head.jsp"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/home.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/home.css">
 </head>
 <body>
 <div class="container">
