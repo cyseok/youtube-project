@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class SearchLogService {
@@ -16,5 +19,17 @@ public class SearchLogService {
     public void addSearch(SearchLog searchLog) {
         searchRepository.save(searchLog);
     }
+
+    /*
+    @Transactional
+    public List<SearchLog> getPostList() {
+        List<SearchLog> searchLog = searchRepository.findAll();
+
+        return searchLog.stream()
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+     */
 
 }
