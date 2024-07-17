@@ -8,8 +8,12 @@
     <property name="LOG_CHARSET" value="${CONSOLE_LOG_CHARSET:-default}"/>
 
     <!-- 로그 파일이 저장될 경로 -->
-     <property name="LOG_PATH" value="/Users/yunseok/Desktop/youtube/src/main/resources/log"/>
-<!--    <property name="LOG_PATH" value="/usr/local/tomcat10/webapps/youtube/resources"/>-->
+<!--     <property name="LOG_PATH" value="/Users/yunseok/Desktop/youtube/src/main/resources/log"/>-->
+
+    <!-- Git 디렉토리 -->
+    <!--property name="LOG_PATH" value="/Users/yunseok/Desktop/IntelliJ Git/youtube-project/src/main/resources/log"/>-->
+    <property name="LOG_PATH" value="/usr/local/tomcat10/webapps/youtube/resources"/>
+
     <!-- 로그 파일 이름 -->
     <property name="LOG_FILE_NAME" value="youtubeLog"/>
     <!-- 로그 출력 패턴 -->
@@ -22,7 +26,7 @@
         3) INFO  : 정보성 메시지 표시
         4) DEBUG : 디버깅하기 위한 메시지 표시
         5) TRACE : Debug보다 훨씬 상세한 메시지 표시
-        아래에서는 info로 설정하였는데, 이 경우엔 INFO보다 위에 있는 DEBUG와 TRACE는 표시하지 않는다.
+        INFO는 높은 레벨의 DEBUG와 TRACE는 표시하지 않음.
     -->
 
     <!-- CONSOLE에 로그 출력 세팅 -->
@@ -56,10 +60,12 @@
     <root level="${LOG_LEVEL}">
         <!-- 위에 설정한 콘솔 설정 추가 -->
         <appender-ref ref="CONSOLE"/>
+<!--        <appender-ref ref="FILE"/>-->
     </root>
 
     <logger name="org.springframework.web" level="debug">
         <!-- 위에 설정한 파일 설정 추가 -->
         <appender-ref ref="FILE" />
     </logger>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
 </configuration>

@@ -41,4 +41,4 @@ out/
 /dataSources.local.xml
 
 # properties
-/src/main/resources/application.properties
+# /src/main/resources/application.properties
