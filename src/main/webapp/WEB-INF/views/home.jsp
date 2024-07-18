@@ -26,7 +26,7 @@
             </a>
         </div>
 
-        <h2 class="text-center mb-4">YouTube 댓글 검색 (추첨 가능!)</h2>
+        <h2 class="text-center mb-4">YouTube 댓글 검색 (추첨기)</h2>
         <br>
         <form action="/search" method="GET" enctype="multipart/form-data">
             <div class="mb-3">
