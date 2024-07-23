@@ -31,7 +31,7 @@ public class VideoApiService {
                     .setApplicationName("youtube-video-info-app")
                     .build();
 
-            //String videoUrl = extractVideoId(videoUrl);
+            //String videoUrl1 = extractVideoId(videoUrl);
 
             System.out.println("videoId : " + videoUrl);
 
@@ -53,6 +53,8 @@ public class VideoApiService {
                         .list(Collections.singletonList("snippet"))
                         .setKey(apiKey)
                         .setId(Collections.singletonList(snippet.getChannelId()));
+
+                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+channelRequest);
 
                 ChannelListResponse channelResponse = channelRequest.execute();
                 String channelUrl = "https://www.youtube.com/channel/" + snippet.getChannelId();
