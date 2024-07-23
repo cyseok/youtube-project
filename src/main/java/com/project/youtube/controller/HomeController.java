@@ -1,27 +1,22 @@
 package com.project.youtube.controller;
 
-import com.project.youtube.dto.Comment;
-import com.project.youtube.dto.VideoInfo;
 import com.project.youtube.dto.VisitorLog;
-import com.project.youtube.service.CommentApiService;
-import com.project.youtube.service.VideoApiService;
 import com.project.youtube.service.VisitorLogService;
 import com.project.youtube.service.VisitorService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import java.util.Date;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final CommentApiService commentApiService;
-    private final VideoApiService videoApiService;
     private final VisitorService visitorService;
     private final VisitorLogService visitorLogService;
 
@@ -35,7 +30,10 @@ public class HomeController {
      */
 
     @GetMapping("/")
-    public String home(VisitorLog visitorLog, jakarta.servlet.http.HttpServletRequest request) {
+    public String home(VisitorLog visitorLog
+                        , HttpServletRequest request
+                        , HttpServletResponse response) {
+
         String ipAddress = request.getRemoteAddr();
         System.out.println("ipAddress :" + ipAddress);
         // 홈페이지를 들어오자마자 조회수를 업데이트 해야할거같다.
@@ -43,24 +41,49 @@ public class HomeController {
         visitorService.addCount();
         visitorLog.setVisitorIp(ipAddress);
 
-        visitorLogService.addVisitor(visitorLog);
+        visitorCount(visitorLog, request, response);
+        // visitorLogService.addVisitor(visitorLog);
 
         return "home";
     }
 
-    @GetMapping("/search")
-    @ResponseBody
-    public List<Comment> getComments(@RequestParam String videoUrl
-                                        , @RequestParam String keyword
-                                        , @RequestParam int count) {
-        return commentApiService.getCommentsWithKeyword(videoUrl, keyword, count);
+    private void visitorCount(VisitorLog visitorLog
+                            , HttpServletRequest request
+                            , HttpServletResponse response) {
+        Cookie oldCookie = null;
+        String visitorId = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("visitorId")) {
+                    oldCookie = cookie;
+                    visitorId = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains(visitorId)) {
+                visitorLogService.addVisitor(visitorLog);
+
+                visitorId = UUID.randomUUID().toString();
+                Cookie newCookie = new Cookie("visitorId", visitorId);
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            visitorId = UUID.randomUUID().toString();
+            Cookie newCookie = new Cookie("visitorId", visitorId);
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            response.addCookie(newCookie);
+
+            visitorLogService.addVisitor(visitorLog);
+        }
+
     }
 
-    @GetMapping("/video")
-    @ResponseBody
-    public ResponseEntity<VideoInfo> getVideoInfo(@RequestParam String videoUrl) {
-        VideoInfo info = videoApiService.getVideoInfo(videoUrl);
-        System.out.println("info @@@@@@@@@@@@" + info);
-        return  ResponseEntity.ok(videoApiService. getVideoInfo(videoUrl));
-    }
 }
