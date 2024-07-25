@@ -70,7 +70,6 @@
             <div class="info">
                 <br>
                 <p> 문의 : cysuk123@naver.com</p>
-                <p> 개발자 취준생이 하루에 만든 페이지..</p>
             </div>
         </form>
     </div>
