@@ -7,8 +7,8 @@ import com.project.youtube.dto.VisitorLog;
 import com.project.youtube.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.ConfigurationKeys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +23,6 @@ public class HomeRestController {
     private final CommentApiService commentApiService;
     private final VideoApiService videoApiService;
 
-//    @PatchMapping("/visitor-count")
-//    public ResponseEntity<String> modifyCount() {
-//        visitorService.addCount();
-//        return ResponseEntity.ok("Count incremented successfully");
-//    }
-
     @PostMapping("/visitor-log")
     public ResponseEntity<String> addVisitor(VisitorLog visitorLog
                                         , HttpServletRequest request
@@ -39,9 +33,8 @@ public class HomeRestController {
 
         visitorLogService.addVisitor(visitorLog);
 
-        return ResponseEntity.ok("Search added successfully");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
-
 
     @PostMapping("/search-log")
     public ResponseEntity<String> addSearch(SearchLog searchLog
@@ -53,22 +46,28 @@ public class HomeRestController {
 
         searchLogService.addSearch(searchLog);
 
-        return ResponseEntity.ok("Search added successfully");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // youtube API
     @GetMapping("/search")
-    public List<Comment> getComments(@RequestParam String videoUrl
-            , @RequestParam String keyword
-            , @RequestParam int count) {
-        return commentApiService.getCommentsWithKeyword(videoUrl, keyword, count);
+    public ResponseEntity<List<Comment>> getComments(@RequestParam String videoUrl
+                                        , @RequestParam String keyword
+                                        , @RequestParam int count) {
+
+        List<Comment> commentList = commentApiService.getCommentsWithKeyword(videoUrl, keyword, count);
+
+        return ResponseEntity.status(HttpStatus.OK).body(commentList);
     }
 
     @GetMapping("/video")
     public ResponseEntity<VideoInfo> getVideoInfo(@RequestParam String videoUrl) {
-        VideoInfo info = videoApiService.getVideoInfo(videoUrl);
-        System.out.println("info @@@@@@@@@@@@" + info);
-        return  ResponseEntity.ok(videoApiService. getVideoInfo(videoUrl));
+        VideoInfo videoInfoinfo = videoApiService.getVideoInfo(videoUrl);
+        System.out.println("videoInfoinfo @@@@@@@@@@@@" + videoInfoinfo);
+
+        // return  ResponseEntity.ok(videoApiService. getVideoInfo(videoUrl));
+        // return new ResponseEntity<>(videoInfoinfo, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(videoInfoinfo);
     }
 
 }
