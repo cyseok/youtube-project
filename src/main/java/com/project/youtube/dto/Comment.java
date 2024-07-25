@@ -6,7 +6,6 @@ import lombok.Data;
 import java.time.ZonedDateTime;
 
 @Data
-// @AllArgsConstructor
 @Builder
 public class Comment {
     private String commentId; // 댓글 ID (고유 식별자)
