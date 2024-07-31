@@ -37,115 +37,74 @@ public class CommentApiService {
             String videoOwnerId = getVideoOwnerId(youtube, videoUrl);
             int totalRetrieved = 0;
 
-            if(count == 0) {
-                while (true) {
+            while (true) {
+                CommentThreadListResponse response = getCommentThreadListResponse(youtube, videoUrl, nextPageToken);
+                List<CommentThread> items = response.getItems();
 
-                    YouTube.CommentThreads.List request = youtube.commentThreads()
-                            .list(Collections.singletonList("snippet,replies"))
-                            .setKey(apiKey)
-                            .setVideoId(videoUrl)
-                            .setTextFormat("plainText")
-                            .setMaxResults(100L)  // Set to the maximum allowed value
-                            .setPageToken(nextPageToken);
+                if (count > 0) {
+                    Collections.shuffle(items);
+                }
 
-                    CommentThreadListResponse response = request.execute();
-
-                    List<CommentThread> items = response.getItems();
-
-                    for (CommentThread commentThread : items) {
-
-                        if (count > 0 && totalRetrieved >= count) {
-                            break;
-                        }
-
-                        com.google.api.services.youtube.model.Comment topLevelComment = commentThread.getSnippet().getTopLevelComment();
-                        com.google.api.services.youtube.model.CommentSnippet snippet = topLevelComment.getSnippet();
-
-                        if (isCommentMatchingKeyword(snippet.getTextDisplay(), keyword)) {
-                            Comment dto = Comment.builder()
-                                    .commentId(topLevelComment.getId())
-                                    .channelId(snippet.getAuthorDisplayName())
-                                    .authorChannelUrl(snippet.getAuthorChannelUrl())
-                                    .content(snippet.getTextDisplay())
-                                    .likeCount(snippet.getLikeCount())
-                                    .publishedAt(ZonedDateTime.parse(snippet.getPublishedAt().toStringRfc3339()))
-                                    .updatedAt(ZonedDateTime.parse(snippet.getUpdatedAt().toStringRfc3339()))
-                                    .replyCount(commentThread.getSnippet().getTotalReplyCount())
-                                    .creatorComment(snippet.getAuthorChannelId().getValue().equals(videoOwnerId))
-                                    .build();
-
-                            totalRetrieved++;
-                            commentList.add(dto);
-//                        if (count > 0 && commentList.size() >= count) {
-//                            break;  // 원하는 수의 댓글을 얻었으면 루프 종료
-//                        }
-                        }
+                for (CommentThread commentThread : items) {
+                    // 요청한 수(count)만큼의 댓글을 가져오면 반복종료
+                    if (count > 0 && totalRetrieved >= count) {
+                        break;
                     }
 
-                    nextPageToken = response.getNextPageToken();
-
-                    if (nextPageToken == null) {
-                        break;  // 더 이상 페이지가 없으면 루프 종료
+                    // 응답 결과 Commnet DTO에 담기
+                    Comment dto = processCommentThread(commentThread, keyword, videoOwnerId);
+                    if (dto != null) {
+                        totalRetrieved++;
+                        commentList.add(dto);
                     }
                 }
 
-            } else {
-                while (true) {
-
-                    YouTube.CommentThreads.List request = youtube.commentThreads()
-                            .list(Collections.singletonList("snippet,replies"))
-                            .setKey(apiKey)
-                            .setVideoId(videoUrl)
-                            .setTextFormat("plainText")
-                            .setMaxResults(100L)  // Set to the maximum allowed value
-                            .setPageToken(nextPageToken);
-
-                    CommentThreadListResponse response = request.execute();
-                    // nextPageToken = response.getNextPageToken();
-                    List<CommentThread> items = response.getItems();
-                    System.out.println(items);
-                    Collections.shuffle(items);
-
-                    for (CommentThread commentThread : items) {
-
-                        if (count > 0 && totalRetrieved >= count) {
-                            break;
-                        }
-
-                        com.google.api.services.youtube.model.Comment topLevelComment = commentThread.getSnippet().getTopLevelComment();
-                        com.google.api.services.youtube.model.CommentSnippet snippet = topLevelComment.getSnippet();
-
-                        if (isCommentMatchingKeyword(snippet.getTextDisplay(), keyword)) {
-                            Comment dto = Comment.builder()
-                                    .commentId(topLevelComment.getId())
-                                    .channelId(snippet.getAuthorDisplayName())
-                                    .authorChannelUrl(snippet.getAuthorChannelUrl())
-                                    .content(snippet.getTextDisplay())
-                                    .likeCount(snippet.getLikeCount())
-                                    .publishedAt(ZonedDateTime.parse(snippet.getPublishedAt().toStringRfc3339()))
-                                    .updatedAt(ZonedDateTime.parse(snippet.getUpdatedAt().toStringRfc3339()))
-                                    .replyCount(commentThread.getSnippet().getTotalReplyCount())
-                                    .creatorComment(snippet.getAuthorChannelId().getValue().equals(videoOwnerId))
-                                    .build();
-
-                            totalRetrieved++;
-                            commentList.add(dto);
-                        }
-                    }
-                    nextPageToken = response.getNextPageToken();
-
-                    if (nextPageToken == null) {
-                        break;  // 더 이상 페이지가 없으면 루프 종료
-                    }
+                nextPageToken = response.getNextPageToken();
+                if (nextPageToken == null || (count > 0 && totalRetrieved >= count)) {
+                    break;
                 }
             }
-            //System.out.println(commentList);
+            System.out.println(commentList);
 
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException("YouTube API 호출 중 오류 발생", e);
         }
 
         return commentList;
+    }
+
+    // 댓글 API 응답 요청
+    private CommentThreadListResponse getCommentThreadListResponse(YouTube youtube, String videoUrl, String nextPageToken) throws IOException {
+        YouTube.CommentThreads.List request = youtube.commentThreads()
+                .list(Collections.singletonList("snippet,replies"))
+                .setKey(apiKey)
+                .setVideoId(videoUrl)
+                .setTextFormat("plainText")
+                .setMaxResults(100L)
+                .setPageToken(nextPageToken);
+
+        return request.execute();
+    }
+
+    // 댓글 응답 결과 반환
+    private Comment processCommentThread(CommentThread commentThread, String keyword, String videoOwnerId) {
+        com.google.api.services.youtube.model.Comment topLevelComment = commentThread.getSnippet().getTopLevelComment();
+        com.google.api.services.youtube.model.CommentSnippet snippet = topLevelComment.getSnippet();
+
+        if (isCommentMatchingKeyword(snippet.getTextDisplay(), keyword)) {
+            return Comment.builder()
+                    .commentId(topLevelComment.getId())
+                    .channelId(snippet.getAuthorDisplayName())
+                    .authorChannelUrl(snippet.getAuthorChannelUrl())
+                    .content(snippet.getTextDisplay())
+                    .likeCount(snippet.getLikeCount())
+                    .publishedAt(ZonedDateTime.parse(snippet.getPublishedAt().toStringRfc3339()))
+                    .updatedAt(ZonedDateTime.parse(snippet.getUpdatedAt().toStringRfc3339()))
+                    .replyCount(commentThread.getSnippet().getTotalReplyCount())
+                    .creatorComment(snippet.getAuthorChannelId().getValue().equals(videoOwnerId))
+                    .build();
+        }
+        return null;
     }
 
     private boolean isCommentMatchingKeyword(String commentText, String keyword) {
