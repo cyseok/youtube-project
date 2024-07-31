@@ -46,3 +46,6 @@ out/
 
 # Log
 /src/main/resources/log*/
+
+# Test 코드
+/src/test
