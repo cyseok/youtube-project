@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 $('#videoInfo').show();
 
+                $('html, body').animate({
+                    scrollTop: $("#videoInfo").offset().top
+                }, 100);
+
             }, error: function (error) {
                 alert("유효하지 않은 동영상 URL입니다.");
             }
@@ -118,14 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     commentList.append(commentElement);
                 }
                 //$('#loading').hide();
-                $('html, body').animate({
-                    scrollTop: $("#videoInfo").offset().top
-                }, 100);
             }, error: function (error) {
                 alert("유효하지 않은 동영상 URL입니다.");
             }
         });
-
 
     }
 
