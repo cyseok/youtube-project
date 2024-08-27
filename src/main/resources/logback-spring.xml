@@ -11,7 +11,7 @@
 <!--     <property name="LOG_PATH" value="/Users/yunseok/Desktop/youtube/src/main/resources/log"/>-->
 
     <!-- Git 디렉토리 -->
-    <!--property name="LOG_PATH" value="/Users/yunseok/Desktop/IntelliJ Git/youtube-project/src/main/resources/log"/>-->
+<!--    <property name="LOG_PATH" value="/Users/yunseok/Desktop/IntelliJ Git/youtube-project/src/main/resources/log"/>-->
     <property name="LOG_PATH" value="/usr/local/tomcat10/webapps/youtube/resources"/>
 
     <!-- 로그 파일 이름 -->

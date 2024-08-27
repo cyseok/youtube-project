@@ -54,8 +54,6 @@ public class VideoApiService {
                         .setKey(apiKey)
                         .setId(Collections.singletonList(snippet.getChannelId()));
 
-                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+channelRequest);
-
                 ChannelListResponse channelResponse = channelRequest.execute();
                 String channelUrl = "https://www.youtube.com/channel/" + snippet.getChannelId();
 

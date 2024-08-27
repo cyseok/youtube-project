@@ -60,6 +60,7 @@ public class CommentApiService {
                 }
 
                 nextPageToken = response.getNextPageToken();
+
                 if (nextPageToken == null || (count > 0 && totalRetrieved >= count)) {
                     break;
                 }
