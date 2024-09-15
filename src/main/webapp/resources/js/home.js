@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             if (error instanceof ReferenceError) {
-                alert("유효하지 않은 동영상 URL입니다ㅠㅠ");
+                alert("유효하지 않은 동영상 URL입니다.");
             }
         }
 
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 100);
 
             }, error: function (error) {
-                alert("유효하지 않은 동영상 URL입니다.");
+                alert("영상 정보를 가져올 수 없습니다.");
             }
         });
 
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 //$('#loading').hide();
             }, error: function (error) {
-                alert("유효하지 않은 동영상 URL입니다.");
+                alert("댓글 정보를 가져올 수 없습니다.");
             }
         });
 
