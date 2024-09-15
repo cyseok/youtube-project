@@ -20,7 +20,6 @@ public class HomeController {
     private final VisitorService visitorService;
     private final VisitorLogService visitorLogService;
 
-
     /*
     @RequiredArgsConstructor 어노테이션은 final 필드나 @NonNull로 표시된 필드에 대해
     아래와 같은 생성자를 자동으로 생성해준다..
