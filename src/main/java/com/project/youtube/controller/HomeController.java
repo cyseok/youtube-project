@@ -65,7 +65,7 @@ public class HomeController {
 
         if (oldCookie != null) {
             if (!oldCookie.getValue().contains(visitorId)) {
-                visitorLogService.addVisitor(visitorLog);
+                //visitorLogService.addVisitor(visitorLog);
 
                 visitorId = UUID.randomUUID().toString();
                 Cookie newCookie = new Cookie("visitorId", visitorId);
@@ -80,7 +80,7 @@ public class HomeController {
             newCookie.setMaxAge(60 * 60 * 24);
             response.addCookie(newCookie);
 
-            visitorLogService.addVisitor(visitorLog);
+            //visitorLogService.addVisitor(visitorLog);
         }
 
     }
